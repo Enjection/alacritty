@@ -1669,11 +1669,16 @@ impl<T: EventListener> Handler for Term<T> {
         self.colors[index] = None;
     }
 
+
+    #[inline]
+    fn apc_store(&mut self, data: &[u8], _unused: u8) {
+        println!("apc_store: {:x?}", data);
+    }
+
     /// Store data into clipboard.
     #[inline]
     fn clipboard_store(&mut self, clipboard: u8, base64: &[u8]) {
         if !matches!(self.config.osc52, Osc52::OnlyCopy | Osc52::CopyPaste) {
-            debug!("Denied osc52 store");
             return;
         }
 
@@ -1694,7 +1699,6 @@ impl<T: EventListener> Handler for Term<T> {
     #[inline]
     fn clipboard_load(&mut self, clipboard: u8, terminator: &str) {
         if !matches!(self.config.osc52, Osc52::OnlyPaste | Osc52::CopyPaste) {
-            debug!("Denied osc52 load");
             return;
         }
 
